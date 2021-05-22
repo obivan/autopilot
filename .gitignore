@@ -27,4 +27,4 @@ autopilot-*.tar
 
 # Idea stuff
 /.idea/
-/.autopilot.iml
+/autopilot.iml
