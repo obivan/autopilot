@@ -5,7 +5,7 @@ defmodule Autopilot.Pitch do
 
   def sensor_name, do: :pitch
 
-  def set_output(output, current_rate) do
+  def set_output!(output, current_rate) do
     output = Float.round(output, 2)
 
     cond do

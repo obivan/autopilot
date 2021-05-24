@@ -6,7 +6,6 @@ defmodule Autopilot.PidController do
       use GenServer
       require Logger
 
-      @signal_value_regex ~r"^[-+]?\d*\.\d+|\d+"
       @wake_term :work
 
       # Client
@@ -39,9 +38,9 @@ defmodule Autopilot.PidController do
       def handle_info(:work, state) do
         new_state =
           try do
-            {error, rate} = read_signal(sensor_name(), state)
+            {error, rate} = read_signal!(sensor_name(), state)
             {output, new_state} = calculate_output(error, state)
-            set_output(output, rate)
+            set_output!(output, rate)
             new_state
           catch
             kind, failure ->
@@ -56,7 +55,7 @@ defmodule Autopilot.PidController do
 
       # Implementation
 
-      defp read_signal(sensor, state) do
+      defp read_signal!(sensor, state) do
         Autopilot.Simulation.telemetry(sensor)
         |> prepare_signal(state)
       end
@@ -99,7 +98,7 @@ defmodule Autopilot.PidController do
 
       @spec clean_signal(String.t()) :: float()
       defp clean_signal(signal) do
-        with [first_number | _] <- Regex.run(@signal_value_regex, signal),
+        with [first_number | _] <- Regex.run(~r"^[-+]?\d*\.\d+|\d+", signal),
              {signal, _} <- Float.parse(first_number) do
           signal
         end
@@ -108,6 +107,5 @@ defmodule Autopilot.PidController do
   end
 
   @callback sensor_name() :: atom()
-  @callback sensor_name() :: atom()
-  @callback set_output(float(), float()) :: any()
+  @callback set_output!(float(), float()) :: any()
 end

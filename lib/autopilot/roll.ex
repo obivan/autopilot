@@ -5,7 +5,7 @@ defmodule Autopilot.Roll do
 
   def sensor_name, do: :roll
 
-  def set_output(output, current_rate) do
+  def set_output!(output, current_rate) do
     output = Float.round(output, 2)
 
     cond do

@@ -5,7 +5,7 @@ defmodule Autopilot.AxisY do
 
   def sensor_name, do: {:axis, :y}
 
-  def set_output(output, current_rate) do
+  def set_output!(output, current_rate) do
     output = Float.round(output, 2)
     current_rate = Float.round(current_rate, 2)
 
