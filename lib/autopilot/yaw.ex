@@ -1,9 +1,7 @@
 defmodule Autopilot.Yaw do
   @moduledoc false
 
-  use Autopilot.PidController
-
-  def sensor_name, do: :yaw
+  use Autopilot.PidController, sensor: :yaw
 
   def set_output!(output, current_rate) do
     output = Float.round(output, 2)

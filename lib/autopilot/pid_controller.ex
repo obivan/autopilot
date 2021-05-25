@@ -1,12 +1,13 @@
 defmodule Autopilot.PidController do
   @moduledoc false
 
-  defmacro __using__(_opts) do
+  defmacro __using__([sensor: sensor] = _opts) do
     quote do
       use GenServer
       require Logger
 
       @wake_term :work
+      @sensor_name unquote(sensor)
 
       # Client
 
@@ -38,14 +39,13 @@ defmodule Autopilot.PidController do
       def handle_info(:work, state) do
         new_state =
           try do
-            {error, rate} = read_signal!(sensor_name(), state)
+            {error, rate} = read_signal!(@sensor_name, state)
             {output, new_state} = calculate_output(error, state)
             set_output!(output, rate)
             new_state
           catch
             kind, failure ->
-              sensor = sensor_name()
-              Logger.debug(sensor: sensor, kind: kind, failure: failure)
+              Logger.debug(sensor: @sensor_name, kind: kind, failure: failure)
               state
           end
 
@@ -106,6 +106,5 @@ defmodule Autopilot.PidController do
     end
   end
 
-  @callback sensor_name() :: atom()
   @callback set_output!(float(), float()) :: any()
 end

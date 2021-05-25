@@ -1,9 +1,7 @@
 defmodule Autopilot.AxisX do
   @moduledoc false
 
-  use Autopilot.PidController
-
-  def sensor_name, do: {:axis, :x}
+  use Autopilot.PidController, sensor: {:axis, :x}
 
   def set_output!(output, current_rate) do
     output = Float.round(output, 2)

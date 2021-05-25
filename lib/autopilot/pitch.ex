@@ -1,9 +1,7 @@
 defmodule Autopilot.Pitch do
   @moduledoc false
 
-  use Autopilot.PidController
-
-  def sensor_name, do: :pitch
+  use Autopilot.PidController, sensor: :pitch
 
   def set_output!(output, current_rate) do
     output = Float.round(output, 2)
